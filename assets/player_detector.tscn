@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://nme5b2i20thm"]
+
+[ext_resource type="Script" path="res://scripts/player_detector.gd" id="1_dby78"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_04nd2"]
+radius = 2.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_kssj1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_04nd2"]
+
+[node name="PlayerDetector" type="Area3D"]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
+script = ExtResource("1_dby78")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0288695, 0)
+shape = SubResource("SphereShape3D_04nd2")
+debug_color = Color(0.15307575, 0.03349487, 0.003132602, 0.41960785)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("BoxMesh_kssj1")
+
+[node name="First Arm" type="Marker3D" parent="."]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -0.8559894, 0, -0.93255997)
+
+[node name="Scale Displacer" type="Node3D" parent="First Arm"]
+transform = Transform3D(-0.99999994, 0, 0, 0, -1, 0, 0, 0, -2.43, 0, 0, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="First Arm/Scale Displacer"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0, -1.2397618)
+mesh = SubResource("BoxMesh_04nd2")
+skeleton = NodePath("../../..")
+
+[node name="First Arm2" type="Marker3D" parent="."]
+transform = Transform3D(0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071067, -0.87850416, 0, 0.6873976)
+
+[node name="Scale Displacer" type="Node3D" parent="First Arm2"]
+transform = Transform3D(-0.9999997, 0, 0, 0, -1, 0, 0, 0, -2.6249995, 0, 0, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="First Arm2/Scale Displacer"]
+transform = Transform3D(0.1, 0, 7.1054274e-15, 0, 0.1, 0, 0, 0, 1, 1.1920929e-07, 0, -0.25834954)
+mesh = SubResource("BoxMesh_04nd2")
+skeleton = NodePath("../../..")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

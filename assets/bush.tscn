@@ -1,0 +1,47 @@
+[gd_scene load_steps=6 format=3 uid="uid://ds1tf50mh0sxp"]
+
+[ext_resource type="Texture2D" uid="uid://dc7crcuj4knam" path="res://assets/PSX_Seamless_WildForestGrass_128px.png" id="1_ntfhk"]
+[ext_resource type="Script" uid="uid://cmyrg4byefa1q" path="res://scripts/ConcealmentArea.gd" id="2_plhp5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iq27n"]
+albedo_texture = ExtResource("1_ntfhk")
+
+[sub_resource type="BoxMesh" id="BoxMesh_xlu8g"]
+size = Vector3(2, 2, 1.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_brejn"]
+size = Vector3(3.118927, 1.8134766, 2.779541)
+
+[node name="Bush" type="Node3D" groups=["concel"]]
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.447393, 0.127685, -1.30093, -0.42718, 0.431449, 0.207969, 1.0569, 0.120333, 0.634749, 0, 0.155569, -0.795265)
+material_overlay = SubResource("StandardMaterial3D_iq27n")
+mesh = SubResource("BoxMesh_xlu8g")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.836425, 0.018315, -0.440606, 0.0695935, 0.724604, 0.165091, 0.458725, -0.143325, 0.778341, 0, 0.155569, -1.01369)
+material_overlay = SubResource("StandardMaterial3D_iq27n")
+mesh = SubResource("BoxMesh_xlu8g")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.588033, -0.517442, -0.86678, -0.923012, -0.0206659, 0.704299, -0.323421, 0.999776, -0.434051, 0.165118, 0.110766, -0.484125)
+material_overlay = SubResource("StandardMaterial3D_iq27n")
+mesh = SubResource("BoxMesh_xlu8g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.365956, 0.279238, -0.887751, -0.606613, 0.794997, 0, 0.70576, 0.538521, 0.460324, 0, 0.155569, 0)
+material_overlay = SubResource("StandardMaterial3D_iq27n")
+mesh = SubResource("BoxMesh_xlu8g")
+
+[node name="Area3D" type="Area3D" parent="." groups=["concel"]]
+transform = Transform3D(1, -1.4901161e-08, 2.9802322e-08, -2.9802322e-08, 1, 0, 0, -5.9604645e-08, 1.0000001, 0, -1.4901161e-08, 7.450581e-09)
+collision_layer = 128
+script = ExtResource("2_plhp5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, -2.1175824e-22, 0, 0, 1, 0, 0, 0, 1, 0.40376282, 0.5864258, -0.8897704)
+shape = SubResource("BoxShape3D_brejn")
+
+[connection signal="area_entered" from="Area3D" to="Area3D" method="_on_area_entered"]
+[connection signal="area_exited" from="Area3D" to="Area3D" method="_on_area_exited"]

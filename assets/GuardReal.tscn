@@ -1,0 +1,102 @@
+[gd_scene load_steps=12 format=3 uid="uid://c2hara3ig8d4y"]
+
+[ext_resource type="Script" uid="uid://sogqmn71hqf7" path="res://scripts/GuardController.gd" id="1_ot108"]
+[ext_resource type="Script" uid="uid://cmgcelj1qxg8o" path="res://addons/tattomoosa.vision_cone_3d/src/VisionCone3D.gd" id="2_i2css"]
+[ext_resource type="Script" uid="uid://6afiheyvybv7" path="res://scripts/GuardPercepition.gd" id="3_pedp5"]
+[ext_resource type="PackedScene" uid="uid://nme5b2i20thm" path="res://assets/player_detector.tscn" id="4_i2css"]
+[ext_resource type="Script" uid="uid://bpgref4gonsve" path="res://assets/player_hit_zone.gd" id="5_pedp5"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rtt6x"]
+height = 1.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kegum"]
+albedo_color = Color(0.1223133, 0.35863125, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_33uwf"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3ryrw"]
+size = Vector3(0.7, 0.1, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ajgek"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pedp5"]
+size = Vector3(4.2630615, 1, 2.7984314)
+
+[node name="Guard" type="CharacterBody3D" groups=["guards"]]
+wall_min_slide_angle = 0.7853982
+floor_stop_on_slope = false
+floor_block_on_wall = false
+floor_max_angle = 1.2304571
+floor_snap_length = 0.0
+script = ExtResource("1_ot108")
+move_speed = 7.0
+patrol_reached_radius = 2.5
+alert_scan_time = 2.0
+alert_max_time = 20.0
+alert_points_per_sector = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_rtt6x")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+material_override = SubResource("StandardMaterial3D_kegum")
+mesh = SubResource("CapsuleMesh_33uwf")
+
+[node name="Facing" type="Node3D" parent="."]
+
+[node name="Glasses" type="MeshInstance3D" parent="Facing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00641823, 0.585872, -0.380594)
+mesh = SubResource("BoxMesh_3ryrw")
+skeleton = NodePath("../../CollisionShape3D")
+surface_material_override/0 = SubResource("StandardMaterial3D_ajgek")
+
+[node name="Label3D" type="Label3D" parent="Facing"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.00152302, 1.15203, -0.00184846)
+visible = false
+text = "PATROL"
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Facing"]
+transform = Transform3D(1, 0, 0, 0, 0.977787, 0.20960106, 0, -0.20960106, 0.977787, 0.010272254, 0.6538569, -0.5532597)
+light_color = Color(0.7807481, 0.8543238, 1, 1)
+light_energy = 0.6
+spot_range = 60.0
+spot_attenuation = -1.0
+spot_angle = 61.0
+
+[node name="Overhead" type="Node3D" parent="Facing"]
+
+[node name="Sign" type="Label3D" parent="Facing/Overhead"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3783088, 0)
+billboard = 1
+font_size = 96
+outline_size = 2
+
+[node name="VisionCone3D" type="Area3D" parent="Facing"]
+transform = Transform3D(0.99994916, 0.0061916537, -0.007958874, -0.0061640027, 0.9999749, 0.003493889, 0.007980309, -0.00344465, 0.9999622, 0, 0.46779156, -0.57939816)
+script = ExtResource("2_i2css")
+range = 25.0
+angle = 120.0
+vision_test_mode = 0
+metadata/_custom_type_script = "uid://cmgcelj1qxg8o"
+
+[node name="Perception" type="Node3D" parent="."]
+script = ExtResource("3_pedp5")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+keep_y_velocity = false
+debug_enabled = true
+
+[node name="PlayerHitZone" parent="." instance=ExtResource("4_i2css")]
+transform = Transform3D(-0.99994916, 0.0061916537, 0.007958962, 0.006164002, 0.9999749, -0.0034938895, -0.007980397, -0.00344465, -0.9999622, 0, 0.14429283, -0.09178811)
+script = ExtResource("5_pedp5")
+
+[node name="DamageTimer" type="Timer" parent="PlayerHitZone"]
+wait_time = 0.5
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="PlayerHitZone"]
+transform = Transform3D(0.99998146, 1.4483885e-07, 0, 1.2660166e-07, 1, 0, 3.9115548e-08, 2.3748726e-08, 1, -0.072442055, 4.4703484e-08, 1.6779631)
+shape = SubResource("BoxShape3D_pedp5")
+
+[connection signal="body_hidden" from="Facing/VisionCone3D" to="." method="_on_vision_cone_3d_body_hidden"]
+[connection signal="body_sighted" from="Facing/VisionCone3D" to="." method="_on_vision_cone_3d_body_sighted"]

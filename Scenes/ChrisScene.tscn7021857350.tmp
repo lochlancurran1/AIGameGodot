@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://f4l3n0xncmr5"]
+
+[ext_resource type="PackedScene" uid="uid://dj0vxhttsyh6b" path="res://assets/terrrain.tscn" id="1_aexdf"]
+[ext_resource type="Script" uid="uid://bx5pfj2hpp4e3" path="res://scripts/Main.gd" id="1_d4l1i"]
+[ext_resource type="PackedScene" uid="uid://boxa8qyw466xs" path="res://assets/sector_bounds.tscn" id="2_d4l1i"]
+[ext_resource type="PackedScene" uid="uid://bkdeajec0vros" path="res://assets/guard.tscn" id="3_hprc1"]
+[ext_resource type="PackedScene" uid="uid://dts1rqcw4f4af" path="res://assets/player.tscn" id="4_5ku3t"]
+
+[node name="ChrisScene" type="Node3D"]
+script = ExtResource("1_d4l1i")
+sector_bounds_path = NodePath("SectorBounds")
+nav_region_path = NodePath("Terrrain/terrainobject/NavigationRegion3D")
+
+[node name="Terrrain" parent="." instance=ExtResource("1_aexdf")]
+
+[node name="NavigationRegion3D" parent="Terrrain/terrainobject" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8196797, 0, 1.7623005)
+
+[node name="Player" parent="." groups=["player"] instance=ExtResource("4_5ku3t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.45511, 19.486412, 48.661983)
+
+[node name="SectorBounds" parent="." instance=ExtResource("2_d4l1i")]
+
+[node name="Guards" type="Node3D" parent="."]
+
+[node name="Guard" parent="Guards" instance=ExtResource("3_hprc1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.059822, 23.11819, 57.83968)
+
+[node name="Guard4" parent="Guards/Guard" instance=ExtResource("3_hprc1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.57779, 0, -132.92691)
+
+[node name="Guard3" parent="Guards/Guard" instance=ExtResource("3_hprc1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.059822, 0.88180923, 8.16032)
+
+[node name="Guard2" parent="Guards/Guard" instance=ExtResource("3_hprc1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.059822, 1.8818092, 9.16032)
+
+[node name="Guard5" parent="Guards/Guard" instance=ExtResource("3_hprc1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.63761, 1.8818092, -123.76659)
+
+[editable path="Terrrain"]

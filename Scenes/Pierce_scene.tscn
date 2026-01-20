@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://i64y8efd8ifr"]
+
+[ext_resource type="PackedScene" uid="uid://dj0vxhttsyh6b" path="res://assets/terrrain.tscn" id="1_xpgly"]
+[ext_resource type="PackedScene" uid="uid://ceqkgqnynw557" path="res://assets/heli.tscn" id="2_8upjp"]
+[ext_resource type="PackedScene" uid="uid://dts1rqcw4f4af" path="res://assets/player.tscn" id="3_8upjp"]
+[ext_resource type="PackedScene" uid="uid://ylggyhfgm3a7" path="res://bird_flock.tscn" id="4_d4b07"]
+[ext_resource type="PackedScene" uid="uid://c2hara3ig8d4y" path="res://assets/GuardReal.tscn" id="5_0r2r5"]
+
+[node name="PierceScene" type="Node3D"]
+
+[node name="Terrrain" parent="." instance=ExtResource("1_xpgly")]
+
+[node name="Helicopter" parent="." instance=ExtResource("2_8upjp")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
+min_x = -50.0
+max_x = 50.0
+min_z = -50.0
+max_z = 50.0
+
+[node name="Player" parent="." instance=ExtResource("3_8upjp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.76252, 0)
+
+[node name="BirdFlock" parent="." instance=ExtResource("4_d4b07")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 6.7254972, 0)
+
+[node name="BirdFlock2" parent="." instance=ExtResource("4_d4b07")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -40.06103, 21.643661, 59.874763)
+
+[node name="BirdFlock3" parent="." instance=ExtResource("4_d4b07")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 56.103634, 19.320084, 22.566452)
+
+[node name="BirdFlock4" parent="." instance=ExtResource("4_d4b07")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 71.354, 10.178031, -67.564896)
+
+[node name="Guard" parent="." instance=ExtResource("5_0r2r5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72.046326, 12.0642605, 0)

@@ -1,0 +1,101 @@
+[gd_scene load_steps=15 format=3 uid="uid://bkdeajec0vros"]
+
+[ext_resource type="Material" uid="uid://c4wwd83fnrqe4" path="res://materials/red.tres" id="1_6305i"]
+[ext_resource type="Script" uid="uid://cmgcelj1qxg8o" path="res://addons/tattomoosa.vision_cone_3d/src/VisionCone3D.gd" id="3_agl3b"]
+[ext_resource type="Script" uid="uid://6afiheyvybv7" path="res://scripts/GuardPercepition.gd" id="3_lngpj"]
+[ext_resource type="PackedScene" uid="uid://nme5b2i20thm" path="res://assets/player_detector.tscn" id="4_04nd2"]
+[ext_resource type="Script" uid="uid://sogqmn71hqf7" path="res://scripts/GuardController.gd" id="4_kssj1"]
+[ext_resource type="Script" uid="uid://bj8smv1165s0q" path="res://scripts/GuardMove.gd" id="5_04nd2"]
+[ext_resource type="Script" uid="uid://bhuvxkdwhokme" path="res://scripts/GuardTaskRunner.gd" id="6_f4dfr"]
+[ext_resource type="Script" uid="uid://pev72d7yx5px" path="res://assets/player_detector.gd" id="7_kssj1"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rtt6x"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_33uwf"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3ryrw"]
+size = Vector3(0.7, 0.1, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ajgek"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_lngpj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kssj1"]
+transparency = 1
+albedo_color = Color(0.6493946, 0.66728926, 0.36843082, 0.50980395)
+
+[node name="Guard" type="CharacterBody3D" groups=["guards"]]
+script = ExtResource("4_kssj1")
+alert_reached_radius = 2.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_rtt6x")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+material_override = ExtResource("1_6305i")
+mesh = SubResource("CapsuleMesh_33uwf")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="Facing" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -0.048220873)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Facing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00641823, 0.585872, -0.380594)
+mesh = SubResource("BoxMesh_3ryrw")
+skeleton = NodePath("../../CollisionShape3D")
+surface_material_override/0 = SubResource("StandardMaterial3D_ajgek")
+
+[node name="Label3D" type="Label3D" parent="Facing"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.00152302, 1.15203, -0.00184846)
+text = "PATROL"
+
+[node name="RayCast3D" type="RayCast3D" parent="Facing"]
+transform = Transform3D(1, 0, 0, 0, 0.9999546, 0.009529327, 0, -0.009529327, 0.9999546, 0.00750935, 0.235567, -0.639258)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Facing"]
+transform = Transform3D(1, 0, 0, 0, 0.977787, 0.20960106, 0, -0.20960106, 0.977787, 0.5553104, 0.45002854, -0.13159883)
+light_color = Color(0.545348, 0.6728721, 0.9617235, 1)
+light_energy = 7.0
+spot_range = 30.0
+spot_attenuation = 0.2
+spot_angle = 40.75
+
+[node name="VisionCone3D" type="Area3D" parent="Facing" groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.596743, -0.936384)
+script = ExtResource("3_agl3b")
+angle = 62.476
+debug_draw = true
+vision_test_mode = 0
+
+[node name="Overhead" type="Node3D" parent="Facing"]
+
+[node name="Sign" type="Label3D" parent="Facing/Overhead"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3783088, 0)
+billboard = 1
+font_size = 96
+outline_size = 2
+
+[node name="PlayerDetector" parent="Facing" instance=ExtResource("4_04nd2")]
+transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 4.2156025e-09, 0, -0.048220873)
+script = ExtResource("7_kssj1")
+
+[node name="Perception" type="Node3D" parent="."]
+script = ExtResource("3_lngpj")
+
+[node name="move" type="Node3D" parent="."]
+script = ExtResource("5_04nd2")
+
+[node name="TaskRunner" type="Node3D" parent="."]
+script = ExtResource("6_f4dfr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0.09601402)
+mesh = SubResource("SphereMesh_lngpj")
+surface_material_override/0 = SubResource("StandardMaterial3D_kssj1")
+
+[connection signal="body_hidden" from="Facing/VisionCone3D" to="." method="_on_vision_cone_3d_body_hidden"]
+[connection signal="body_hidden" from="Facing/VisionCone3D" to="Facing/VisionCone3D" method="_on_body_hidden"]
+[connection signal="body_sighted" from="Facing/VisionCone3D" to="." method="_on_vision_cone_3d_body_sighted"]
+[connection signal="body_sighted" from="Facing/VisionCone3D" to="Facing/VisionCone3D" method="_on_body_sighted"]

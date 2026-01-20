@@ -1,0 +1,120 @@
+[gd_scene load_steps=11 format=3 uid="uid://ceqkgqnynw557"]
+
+[ext_resource type="Material" uid="uid://bjpg1ayxeeek1" path="res://materials/grey.tres" id="1_kydm2"]
+[ext_resource type="Script" uid="uid://crjetndse2yms" path="res://scripts/Helicopter.gd" id="2_gtk7b"]
+[ext_resource type="Script" uid="uid://bc32kei4pauw1" path="res://addons/tattomoosa.vision_cone_3d/src/ConeShape3D.gd" id="3_02v2t"]
+[ext_resource type="AudioStream" uid="uid://np0dwr81ita3" path="res://assets/sounds/Helicopter_sound.ogg" id="4_2do46"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_b7ogu"]
+radius = 1.028
+height = 3.364
+
+[sub_resource type="BoxMesh" id="BoxMesh_sgx7j"]
+size = Vector3(0.235, 6, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_42601"]
+size = Vector3(0.205, 0.24, 2.96)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kkl24"]
+size = Vector3(0.8, 1.5, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_83g8w"]
+size = Vector3(0.425, 0.37, 3.755)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_2do46"]
+points = PackedVector3Array(60, -100, 0, 42.426407, -100, 42.426407, 3.673819e-15, -100, 60, -42.426407, -100, 42.426407, -60, -100, 7.347638e-15, -42.426407, -100, -42.426407, -1.1021457e-14, -100, -60, 42.426407, -100, -42.426407, 0, 100, 0)
+script = ExtResource("3_02v2t")
+height = 200.0
+radius = 60.0
+metadata/_custom_type_script = "uid://bc32kei4pauw1"
+
+[node name="Helicopter" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 3
+material_override = ExtResource("1_kydm2")
+mesh = SubResource("CapsuleMesh_b7ogu")
+script = ExtResource("2_gtk7b")
+min_x = -100.0
+max_x = 100.0
+min_z = -100.0
+max_z = 100.0
+
+[node name="prop_holder" type="Node3D" parent="."]
+
+[node name="prop" type="MeshInstance3D" parent="prop_holder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.86048865, 1.8001261)
+material_override = ExtResource("1_kydm2")
+mesh = SubResource("BoxMesh_sgx7j")
+skeleton = NodePath("../../stem")
+
+[node name="stem" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.831419, 0.223326)
+material_override = ExtResource("1_kydm2")
+mesh = SubResource("BoxMesh_42601")
+
+[node name="tail" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.410448, -0.911884, 0, 0.911884, -0.410448, 0, -0.982034, 0.544868)
+material_override = ExtResource("1_kydm2")
+mesh = SubResource("BoxMesh_kkl24")
+
+[node name="tailback" type="MeshInstance3D" parent="tail"]
+transform = Transform3D(1, 0, 0, 0, 0.861, 0.508606, 0, -0.508606, 0.861, 0, 0.776416, 1.40398)
+material_override = ExtResource("1_kydm2")
+mesh = SubResource("BoxMesh_83g8w")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="tail/tailback"]
+transform = Transform3D(1, 0, 0, 0, 0.9999995, 0, 0, 0, 0.9999995, 0, 0.3649327, 1.6195109)
+light_color = Color(1, 0, 0, 1)
+light_energy = 16.0
+light_volumetric_fog_energy = 0.5
+
+[node name="SearchLightPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.9644053, -0.26442856, 0, 0.26442856, 0.9644053, 0, 1.3986425, -1.1433351)
+
+[node name="SearchLight" type="SpotLight3D" parent="SearchLightPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.658029e-08, -1.0656326)
+light_color = Color(0.61088616, 0.7794469, 1, 1)
+light_energy = 25.0
+light_volumetric_fog_energy = 10.0
+shadow_enabled = true
+shadow_bias = 0.05
+spot_range = 200.0
+spot_attenuation = 0.6
+spot_angle = 18.824682
+
+[node name="DetectionArea" type="Area3D" parent="SearchLightPivot"]
+transform = Transform3D(1, 0, 0, 0, -4.3711392e-08, 1, 0, -1, -4.3711392e-08, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SearchLightPivot/DetectionArea"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 100, 0)
+shape = SubResource("ConvexPolygonShape3D_2do46")
+
+[node name="WP1" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 7, 0)
+
+[node name="WP2" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -7, 0)
+
+[node name="WP3" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 7, 0)
+
+[node name="WP4" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, -7, 0)
+
+[node name="WP5" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 14, 0)
+
+[node name="WP6" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, -14, 0)
+
+[node name="WP7" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 14, 0)
+
+[node name="WP8" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, -14, 0)
+
+[node name="HelicopterSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_2do46")
+unit_size = 60.0
+
+[connection signal="body_entered" from="SearchLightPivot/DetectionArea" to="." method="_on_detection_area_body_entered"]
